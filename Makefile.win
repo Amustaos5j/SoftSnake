@@ -1,0 +1,24 @@
+CC       = gcc.exe
+WINDRES  = windres.exe
+RES      = softsnake_private.res
+OBJ      = main.o $(RES)
+LIBS     = -static-libgcc -mwindows
+BIN      = softsnake.exe
+CFLAGS   = -std=c99
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(OBJ) -o $(BIN) $(LIBS)
+
+main.o: main.c
+	$(CC) -c main.c -o main.o $(CFLAGS)
+
+softsnake_private.res: softsnake_private.rc
+	$(WINDRES) -i softsnake_private.rc --input-format=rc -o softsnake_private.res -O coff 
